@@ -72,7 +72,6 @@ if (url.includes("functionId=deliverLayer") || url.includes("functionId=orderTra
   }
 } else if (url.includes("functionId=personinfoBusiness")) {
   // 个人页面
-  console.log(`个人页面 ${JSON.stringify(obj)}`);
   if (obj?.floors?.length > 0) {
     let newFloors = [];
     for (let floor of obj.floors) {
@@ -84,11 +83,12 @@ if (url.includes("functionId=deliverLayer") || url.includes("functionId=orderTra
         "newAttentionCard", // 关注的频道
         "newBigSaleFloor", // 双十一
         "newStyleAttentionCard", // 新版关注的频道
-        "walletFloor1300", // 我的钱包
+        // "newWalletIdFloor", // 我的钱包
         "newsFloor", // 京东快讯
         "noticeFloor", // 顶部横幅
         // "orderIdFloor", // 我的订单
-        "recommendfloor" // 我的推荐
+        "recommendfloor", // 我的推荐
+        "newCardFloor" // 手慢无推荐
       ];
       if (items?.includes(floor?.mId)) {
         continue;
@@ -114,7 +114,8 @@ if (url.includes("functionId=deliverLayer") || url.includes("functionId=orderTra
           if (floor?.data?.floatLayer) {
             delete floor.data.floatLayer;
           }
-        } else if (floor?.mId === "iconToolFloor") {
+        } 
+        /*else if (floor?.mId === "mergeIconFloor") {
           // 底部工具栏
           if (floor?.data?.nodes?.length > 0) {
             const sortLists = [
@@ -129,21 +130,17 @@ if (url.includes("functionId=deliverLayer") || url.includes("functionId=orderTra
               "zhuanzuanhongbao", // 天天赚红包 2-2-1
               "huanletaojin" // 欢乐淘金 2-2-2
             ];
-            let node = floor.data.nodes;
-            if (node?.[0]?.length > 0) {
-              // 第一组十个
-              node[0] = node[0]
-                .filter((i) => sortLists?.includes(i?.functionId))
-                .sort((a, b) => sortLists.indexOf(a?.functionId) - sortLists.indexOf(b?.functionId));
-            }
-            if (node?.[1]?.length > 0) {
-              // 第二组四个
-              node[1] = node[1]
-                .filter((i) => sortLists?.includes(i?.functionId))
-                .sort((a, b) => sortLists.indexOf(a?.functionId) - sortLists.indexOf(b?.functionId));
-            }
+            let nodes = floor.data.nodes;
+            // if (nodes?.length > 0) {
+            //   // 第一组十个
+            //   nodes = nodes
+            //     .filter((i) => sortLists?.includes(i?.functionId))
+            //     .sort((a, b) => sortLists.indexOf(a?.functionId) - sortLists.indexOf(b?.functionId));
+            // }
+            floor.data.nodes = nodes;
           }
-        } else if (floor?.mId === "orderIdFloor") {
+        }*/
+        else if (floor?.mId?.includes("orderFloor")) {
           if (floor?.data?.commentRemindInfo?.infos?.length > 0) {
             // 发布评价的提醒
             floor.data.commentRemindInfo.infos = [];
@@ -157,9 +154,32 @@ if (url.includes("functionId=deliverLayer") || url.includes("functionId=orderTra
           if (floor?.data?.newPlusBlackCard) {
             delete floor.data.newPlusBlackCard;
           }
+        } else if (floor?.mId?.includes("walletFloor")) {
+          delete floor.data.headInfo.rightInfo;
+          // 我的钱包
+          if (floor?.data?.walletList?.length > 0) {
+            const sortLists = [
+              "coupon",     // 优惠券
+              "jingdou",    // 京豆
+              "giftCard",   // 礼品卡
+              "baitiao",    // 白条
+              "yinhangka",  // 信用卡
+            ];
+
+            let walletList = floor.data.walletList
+              .filter((i) => sortLists?.includes(i?.functionId))
+            floor.data.walletList = walletList;
+          }
+        } else if (floor?.mId === "behaviorFloor") {
+          // 去除我的频道
+          if (floor?.data?.behaviorList?.length > 0) {
+            // 过滤掉 functionId 为 "wodepindao" 的项
+            floor.data.behaviorList = floor.data.behaviorList.filter(
+              item => item?.functionId !== "wodepindao"
+            );
+          }
         }
         newFloors.push(floor);
-        console.log('newFloors:', JSON.stringify(newFloors));
       }
     }
     obj.floors = newFloors;
