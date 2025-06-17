@@ -105,7 +105,7 @@ const urlHandlers = new Map([
       (obj) => {
         const itemsToDelete = [
           "cooperate_binds", "generic", "note_next_step", "widgets_nbb",
-          "widgets_ncb", "widgets_ndb", "hot_reco_info"
+          "widgets_ncb", "widgets_ndb", "hot_reco_info", "widget_list"
         ];
         if (obj?.data) {
           itemsToDelete.forEach(item => delete obj.data[item]);
