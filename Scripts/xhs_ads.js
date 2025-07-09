@@ -116,12 +116,8 @@ const urlHandlers = new Map([
   [
     "/v2/note/widgets",
     (obj) => {
-      const itemsToDelete = [
-        "cooperate_binds", "generic", "note_next_step", "widgets_nbb",
-        "widgets_ncb", "widgets_ndb", "hot_reco_info", "widget_list"
-      ];
       if (obj?.data) {
-        itemsToDelete.forEach(item => delete obj.data[item]);
+        obj.data = {}; // 直接将data设置为空对象
       }
       return obj;
     }
