@@ -21,6 +21,7 @@ AND,((PROTOCOL, QUIC), (DOMAIN-SUFFIX, xiaohongshu.com)),REJECT
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/search\/hot_list$ response-body-json-replace data.items []
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v4\/search\/hint response-body-json-replace data.hint_words []
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v4\/search\/trending\? response-body-json-replace data.queries [] data.hint_word {}
+
 ^https:\/\/rec\.xiaohongshu\.com\/api\/sns\/v6\/homefeed\/categories\? response-body-json-jq '.data.categories |= map(select(.oid | . != "homefeed.live" and . != "homefeed.sketch"))'
 ^https:\/\/(?:edith|rec)\.xiaohongshu\.com\/api\/sns\/v6\/homefeed\? response-body-json-jq '.data |= map(if .model_type == "live_v2" or .is_ads == true or has("ads_info") or has("card_icon") or has("note_attributes") then empty else del(.related_ques) end)'
 ^https:\/\/so\.xiaohongshu\.com\/api\/sns\/v10\/search\/notes\? response-body-json-jq '.data.items |= map(select(.model_type == "note"))'
@@ -29,13 +30,16 @@ AND,((PROTOCOL, QUIC), (DOMAIN-SUFFIX, xiaohongshu.com)),REJECT
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v2\/system_service\/splash_config response-body-json-jq '.data.ads_groups |= map(.start_time = 3818332800 | .end_time = 3818419199 | .ads |= map(.start_time = 3818332800 | .end_time = 3818419199))'
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v2\/note\/widgets response-body-json-jq '.data |= empty'
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v2\/user\/followings\/followfeed response-body-json-jq '.data.items |= map(select(.recommend_reason !== "friend_post"))'
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v4\/followfeed\? response-body-json-jq '.data.items |= map(select(.recommend_reason != "recommend_user"))'
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v5\/recommend\/user\/follow_recommend\? '.data |= (if .title == "你可能感兴趣的人" then empty else . end)'
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v5\/recommend\/user\/explore\? response-body-json-jq '.data |= empty'
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v3\/user\/me\? response-body-json-jq '.data.zhong_tong_bar_info.conversions |= map(select(.id != "32" and .id != "20" and .id != "11")) | .data.hula_tabs.all_show_tab_config |= map(select(.tab_id != "note" and .tab_id != "atMe"))'
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/im\/get_recent_chats response-body-json-jq '.data |= del(.recent_chat_user)'
 
 [Script]
-http-response ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/note\/(?:imagefeed|live_photo\/save) script-path=https://raw.githubusercontent.com/jiaweiding/scripts/refs/heads/main/Scripts/new_xhs_ads.js, requires-body=true, timeout=20, tag=移除图片和实况照片水印
-http-response ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/(?:v1\/interaction\/comment\/video\/download|v5\/note\/comment\/list) script-path=https://raw.githubusercontent.com/jiaweiding/scripts/refs/heads/main/Scripts/new_xhs_ads.js, requires-body=true, timeout=20, tag=移除评论区实况照片水印
-
+http-response ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/note\/(?:imagefeed|live_photo\/save) script-path=https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js, requires-body=true, timeout=20, tag=移除图片和实况照片水印
+http-response ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/(?:v1\/interaction\/comment\/video\/download|v5\/note\/comment\/list) script-path=https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js, requires-body=true, timeout=20, tag=移除评论区实况照片水印
+http-response ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/(?:v2\/note\/feed|v3\/note\/videofeed) script-path=https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js, requires-body=true, timeout=20, tag=移除图片和视频水印
+http-response ^https:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/(?:v4\/note\/videofeed|v10\/note\/video\/save) script-path=https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js, requires-body=true, timeout=20, tag=移除视频水印
 [MITM]
 hostname = ci.xiaohongshu.com, edith.xiaohongshu.com, rec.xiaohongshu.com, www.xiaohongshu.com, so.xiaohongshu.com
