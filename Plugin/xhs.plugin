@@ -33,7 +33,7 @@ AND,((PROTOCOL, QUIC), (DOMAIN-SUFFIX, xiaohongshu.com)),REJECT
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v4\/followfeed\? response-body-json-jq '.data.items |= map(select(.recommend_reason != "recommend_user"))'
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v5\/recommend\/user\/follow_recommend\? '.data |= (if .title == "你可能感兴趣的人" then empty else . end)'
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v5\/recommend\/user\/explore\? response-body-json-jq '.data |= empty'
-^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v3\/user\/me\? response-body-json-jq '.data.zhong_tong_bar_info.conversions |= map(select(.id != "32" and .id != "20" and .id != "11")) | .data.hula_tabs.all_show_tab_config |= map(select(.tab_id != "note" and .tab_id != "atMe"))'
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v3\/user\/me\? response-body-json-jq '.data.zhong_tong_bar_info.conversions |= map(select(.id | [33, 22, 21] | index(.))) | .data.hula_tabs.all_show_tab_config |= map(select(.tab_id != "note" and .tab_id != "atMe"))'
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/im\/get_recent_chats response-body-json-jq '.data |= del(.recent_chat_user)'
 
 [Script]
