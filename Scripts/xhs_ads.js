@@ -26,10 +26,10 @@ if (url.includes("/v1/im/get_recent_chats")) {
 } else if (url.includes("/v5/recommend/user/explore")) {
   obj.data = {};
 } else if (url.includes("/v6/homefeed/categories")) {
-  if (obj?.categories?.length > 0) {
+  if (obj?.data.categories?.length > 0) {
       // 首页type，去除直播和短剧
       const excludedTypes = ["homefeed.live", "homefeed.sketch"];
-      obj.categories = obj.categories.filter(item => !excludedTypes.includes(item?.oid));
+      obj.data.categories = obj.data.categories.filter(item => !excludedTypes.includes(item?.oid));
   }
 } else if (url.includes("/v1/interaction/comment/video/download")) {
   // 评论区实况照片保存请求
