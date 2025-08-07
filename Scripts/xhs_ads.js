@@ -14,7 +14,7 @@ if (url.includes("/v1/im/get_recent_chats")) {
       // 过滤 zhong_tong_bar_info.conversions
       if(obj.data.zhong_tong_bar_info?.conversions) {
           obj.data.zhong_tong_bar_info.conversions = obj.data.zhong_tong_bar_info.conversions
-              .filter(item => ["33", "22","21"].includes(item.id));
+              .filter(item => ["33", "22", "21", 33, 22, 21].includes(item.id));
       }
 
       // 过滤 hula_tabs.all_show_tab_config
