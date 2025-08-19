@@ -3,30 +3,60 @@
 
 const url = $request.url;
 if (!$response.body) $done({});
-let obj = JSON.parse($response.body);
+
+let obj;
+try {
+    obj = JSON.parse($response.body);
+} catch (e) {
+    console.log("JSON解析失败: " + e);
+    $done({});
+}
 
 if (url.includes("/api/alexa/homepage/hub")) {
-  // 底部标签栏
-  if (obj?.result) {
-    if (obj?.result?.bottom_tabs?.length > 0) {
-      // 标签栏1
-      obj.result.bottom_tabs = obj.result.bottom_tabs.filter((i) => /(?:chat_list|index|personal)/.test(i?.link));
+    // 底部标签栏
+    if (obj?.result) {
+        if (obj?.result?.bottom_tabs?.length > 0) {
+            // 标签栏1 - 只保留首页、聊天、个人中心
+            obj.result.bottom_tabs = obj.result.bottom_tabs.filter((i) => 
+                /(?:chat_list|index|personal)/.test(i?.link)
+            );
+            console.log("已过滤 bottom_tabs");
+        }
+        
+        if (obj?.result?.buffer_bottom_tabs?.length > 0) {
+            // 标签栏2 - 只保留首页、聊天、个人中心
+            obj.result.buffer_bottom_tabs = obj.result.buffer_bottom_tabs.filter((i) => 
+                /(?:chat_list|index|personal)/.test(i?.link)
+            );
+            console.log("已过滤 buffer_bottom_tabs");
+        }
+        
+        if (obj?.result?.dy_module?.irregular_banner_dy) {
+            delete obj.result.dy_module.irregular_banner_dy; // 首页 顶部banner
+            console.log("已删除 irregular_banner_dy");
+        }
+        
+        delete obj.result.icon_set; // 顶部图标 多多买菜 现金大转盘
+        
+        if (obj?.result?.search_bar_hot_query) {
+            delete obj.result.search_bar_hot_query; // 搜索框填充词
+            console.log("已删除 search_bar_hot_query");
+        }
+        
+        if (obj?.result?.top_skin) {
+            delete obj.result.top_skin; // 首页 顶部背景图
+            console.log("已删除 top_skin");
+        }
+
+        // 可选：删除更多广告元素
+        if (obj?.result?.float_layer) {
+            delete obj.result.float_layer; // 浮层广告
+        }
+        
+        if (obj?.result?.popup_info) {
+            delete obj.result.popup_info; // 弹窗信息
+        }
     }
-    if (obj?.result?.buffer_bottom_tabs?.length > 0) {
-      // 标签栏2
-      obj.result.buffer_bottom_tabs = obj.result.buffer_bottom_tabs.filter((i) => /(?:chat_list|index|personal)/.test(i?.link));
-    }
-    if (obj?.result?.dy_module?.irregular_banner_dy) {
-      delete obj.result.dy_module.irregular_banner_dy; // 首页 顶部banner
-    }
-    // delete obj.result.icon_set; // 顶部图标 多多买菜 现金大转盘
-    if (obj?.result?.search_bar_hot_query) {
-      delete obj.result.search_bar_hot_query; // 搜索框填充词
-    }
-    if (obj?.result?.top_skin) {
-      delete obj.result.top_skin; // 首页 顶部背景图
-    }
-  }
 }
 
 $done({ body: JSON.stringify(obj) });
