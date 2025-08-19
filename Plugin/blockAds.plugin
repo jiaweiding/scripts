@@ -32,18 +32,6 @@
 #############################################
 
 [Argument]
-12306_enable = switch,true,false,tag=12306-脚本开关
-jkds_enable = switch,true,false,tag=京东-脚本开关
-kxke_enable = switch,true,false,tag=夸克-脚本开关
-
-# > Spotify
-tab=switch, true, tag=Spotify-移除底栏创建按钮, desc=此开关控制是否移除底栏创建按钮
-useractivity=switch, true, tag=Spotify-启用Apple设备接力, desc=此开关控制是否使用Apple设备接力
-
-smzdm_enable = switch,true,false,tag=什么值得买-脚本开关
-tcbc_enable = switch,true,false,tag=淘宝-脚本开关
-lmjpxmvi_enable = switch,true,false,tag=解除微信链接限制-脚本开关
-youtube_enable = switch,true,false,tag=YouTube-脚本开关
 
 [Rule]
 # > Keep
@@ -111,11 +99,6 @@ AND, ((PROTOCOL, QUIC), (DOMAIN-SUFFIX, xiaohongshu.com)), REJECT
 # 多多买菜 开屏广告
 ^https?:\/\/mobile\.yangkeduo\.com\/proxy\/api\/api\/express\/post\/waybill\/red_packet\/goods_list$ response-body-replace-regex "list":\[.+\] "list":[]
 
-# > Spotify
-# hostname = *-spclient.spotify.com, spclient.wg.spotify.com
-^https:\/\/(?:\w+-spclient|spclient\.wg)\.spotify\.com(?::443)?\/pendragon\/ reject-dict
-^https:\/\/(?:\w+-spclient|spclient\.wg)\.spotify\.com(?::443)?\/artistview\/v1\/artist\/(.*)&platform=iphone header https://spclient.wg.spotify.com/artistview/v1/artist/$1&platform=ipad
-
 # > 山姆会员商店
 # hostname = api-sams.walmartmobile.cn
 ^https?:\/\/api-sams\.walmartmobile\.cn\/api\/v\d\/sams\/sams-user\/(window\/getGoUpPlus|screen_promotion\/get) reject
@@ -156,11 +139,6 @@ AND, ((PROTOCOL, QUIC), (DOMAIN-SUFFIX, xiaohongshu.com)), REJECT
 ^https?:\/\/mall\.meituan\.com\/api\/c\/homepage\/splash reject-dict
 # 首页领券悬浮红包
 ^https?:\/\/mall\.meituan\.com\/api\/c\/homepage\/bubble\/operate\/info mock-response-body data-type=json data="{"code": 0}"
-
-# > YouTube
-# hostname = rr*.googlevideo.com, youtubei.googleapis.com
-# 播放页广告
-^https:\/\/rr[\w-]+\.googlevideo\.com\/initplayback\? reject-dict
 
 # > 一汽大众
 # hostname = oneapp-api.faw-vw.com
@@ -226,46 +204,32 @@ http-response ^https?:\/\/common\.diditaxi\.com\.cn\/common\/v5 script-path=http
 
 [Script]
 # > 12306
-http-request ^https?:\/\/ad\.12306\.cn\/ad\/ser\/getAdList script-path=https://raw.githubusercontent.com/kokoryh/Script/master/js/12306.js, requires-body=true, timeout=60, tag=12306, enable={12306_enable}
-
-# > 京东
-http-response ^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(deliverLayer|getTabHomeInfo|myOrderInfo|orderTrackBusiness|personinfoBusiness|start|welcomeHome) script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/jingdong/jingdong.js, requires-body=true, timeout=60, tag=京东, enable={jkds_enable}
+http-request ^https?:\/\/ad\.12306\.cn\/ad\/ser\/getAdList script-path=https://raw.githubusercontent.com/kokoryh/Script/master/js/12306.js, requires-body=true, timeout=60, tag=12306, enable=true
 
 # > 夸克
-http-response ^https?:\/\/open-cms-api\.(uc|quark)\.cn\/open-cms script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/quark.js, requires-body=true, timeout=60, tag=夸克, enable={kxke_enable}
-
-# > Spotify
-http-response ^https:\/\/(?:\w+-spclient|spclient\.wg)\.spotify\.com(?::443)?\/(?:bootstrap|user-customization-service) script-path=https://raw.githubusercontent.com/001ProMax/Surge/refs/heads/main/Script/Spotify.Crack.Dev.js, requires-body=true, binary-body-mode=true, timeout=3, argument=[{tab},{useractivity}], tag=Protobuf
+http-response ^https?:\/\/open-cms-api\.(uc|quark)\.cn\/open-cms script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/quark.js, requires-body=true, timeout=60, tag=夸克, enable=true
 
 # > 什么值得买
 # hostname = homepage-api.smzdm.com, haojia-api.smzdm.com, app-api.smzdm.com, user-api.smzdm.com, article-api.smzdm.com, qianbao.smzdm.com, s-api.smzdm.com, haojia.m.smzdm.com
-http-response ^https?:\/\/haojia\.m\.smzdm\.com\/detail_modul\/user_related_modul\? script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/smzdm_ads.js, requires-body=true, timeout=60, tag=什么值得买去广告, enable={smzdm_enable}
-http-response ^https?:\/\/haojia-api\.smzdm\.com\/ranking_list\/articles\? script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/smzdm_ads.js, requires-body=true, timeout=60, tag=什么值得买去广告, enable={smzdm_enable}
-http-response ^https?:\/\/s-api\.smzdm\.com\/sou\/filter\/tags\/hot_tags\? script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/smzdm_ads.js, requires-body=true, timeout=60, tag=什么值得买去广告, enable={smzdm_enable}
-http-response ^https?:\/\/s-api\.smzdm\.com\/sou\/list_v10\? script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/smzdm_ads.js, requires-body=true, timeout=60, tag=什么值得买去广告, enable={smzdm_enable}
-http-response ^https?:\/\/user-api\.smzdm\.com\/vip\/creator_user_center script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/smzdm_ads.js, requires-body=true, timeout=60, tag=什么值得买去广告, enable={smzdm_enable}
-http-response ^https?:\/\/user-api\.smzdm\.com\/vip$ script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/Smzdm.js, requires-body=true, timeout=60, tag=什么值得买去广告, enable={smzdm_enable}
+http-response ^https?:\/\/haojia\.m\.smzdm\.com\/detail_modul\/user_related_modul\? script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/smzdm_ads.js, requires-body=true, timeout=60, tag=什么值得买去广告, enable=true
+http-response ^https?:\/\/haojia-api\.smzdm\.com\/ranking_list\/articles\? script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/smzdm_ads.js, requires-body=true, timeout=60, tag=什么值得买去广告, enable=true
+http-response ^https?:\/\/s-api\.smzdm\.com\/sou\/filter\/tags\/hot_tags\? script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/smzdm_ads.js, requires-body=true, timeout=60, tag=什么值得买去广告, enable=true
+http-response ^https?:\/\/s-api\.smzdm\.com\/sou\/list_v10\? script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/smzdm_ads.js, requires-body=true, timeout=60, tag=什么值得买去广告, enable=true
+http-response ^https?:\/\/user-api\.smzdm\.com\/vip\/creator_user_center script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/smzdm_ads.js, requires-body=true, timeout=60, tag=什么值得买去广告, enable=true
+http-response ^https?:\/\/user-api\.smzdm\.com\/vip$ script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/Smzdm.js, requires-body=true, timeout=60, tag=什么值得买去广告, enable=true
 # 感谢【怎么肥事】分享
-http-response ^https?:\/\/app-api\.smzdm\.com\/util\/loading script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable={smzdm_enable}
-http-response ^https?:\/\/app-api\.smzdm\.com\/util\/update script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable={smzdm_enable}
-http-response ^https?:\/\/user-api\.smzdm\.com\/vip\/bottom_card_list script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable={smzdm_enable}
-http-response ^https?:\/\/haojia-api\.smzdm\.com\/home\/list script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable={smzdm_enable}
-http-response ^https?:\/\/homepage-api\.smzdm\.com\/v3\/home script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable={smzdm_enable}
-http-response ^https?:\/\/article-api\.smzdm\.com\/publish\/get_bubble script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable={smzdm_enable}
-http-response ^https?:\/\/qianbao\.smzdm\.com\/v\d\/app\/home script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable={smzdm_enable}
-
-# > 淘宝
-http-response ^https?:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.(cloudvideo\.video\.query|wireless\.home\.splash\.awesome\.get) script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js, requires-body=true, timeout=60, tag=淘宝, enable={tcbc_enable}
-http-response ^https?:\/\/poplayer\.template\.alibaba\.com\/\w+\.json script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js, requires-body=true, timeout=60, tag=淘宝, enable={tcbc_enable}
+http-response ^https?:\/\/app-api\.smzdm\.com\/util\/loading script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable=true
+http-response ^https?:\/\/app-api\.smzdm\.com\/util\/update script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable=true
+http-response ^https?:\/\/user-api\.smzdm\.com\/vip\/bottom_card_list script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable=true
+http-response ^https?:\/\/haojia-api\.smzdm\.com\/home\/list script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable=true
+http-response ^https?:\/\/homepage-api\.smzdm\.com\/v3\/home script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable=true
+http-response ^https?:\/\/article-api\.smzdm\.com\/publish\/get_bubble script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable=true
+http-response ^https?:\/\/qianbao\.smzdm\.com\/v\d\/app\/home script-path=https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Smzdm.js, requires-body=true, timeout=60, tag=Smzdm, enable=true
 
 # > 解除微信链接限制
 # hostname = weixin110.qq.com, security.wechat.com
 # 微信跳过中间界面，支付宝链接、被封禁链接进行通知弹窗跳转，在微信中用快照显示被封禁的链接（可选），在微信中进行强制重定向（可选），群聊 / 扫码均可使用，可选项可在脚本 2、3 行更改，也可在 BoxJs 中更改。
-http-response ^https\:\/\/(weixin110\.qq|security.wechat)\.com\/cgi-bin\/mmspamsupport-bin\/newredirectconfirmcgi\? script-path=https://raw.githubusercontent.com/zZPiglet/Task/master/asset/UnblockURLinWeChat.js, requires-body=true, timeout=60, tag=UnblockURLinWeChat-解除微信链接限制, enable={lmjpxmvi_enable}
-
-# > YouTube
-# 响应体
-http-response ^https:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch) script-path=https://raw.githubusercontent.com/Maasea/sgmodule/refs/heads/master/Script/Youtube/youtube.response.js, requires-body=true, binary-body-mode=true, timeout=60, tag=YouTube响应体, enable={youtube_enable}
+http-response ^https\:\/\/(weixin110\.qq|security.wechat)\.com\/cgi-bin\/mmspamsupport-bin\/newredirectconfirmcgi\? script-path=https://raw.githubusercontent.com/zZPiglet/Task/master/asset/UnblockURLinWeChat.js, requires-body=true, timeout=60, tag=UnblockURLinWeChat-解除微信链接限制, enable=true
 
 [MITM]
-hostname = gab.122.gov.cn, acs.m.taobao.com, heic.alicdn.com, guide-acs.m.taobao.com, poplayer.template.alibaba.com, cache.bydauto.com.cn, v.icbc.com.cn, ads.iconntech.com, smkmp.96225.com, api.m.jd.com, dns.jd.com, midc.cdn-static.abchina.com.cn, enjoy.cdn-static.abchina.com, firefly.abchina.com.cn, api.pinduoduo.com, api.yangkeduo.com, mobile.yangkeduo.com, *-spclient.spotify.com, spclient.wg.spotify.com, api-sams.walmartmobile.cn, adm.10jqka.com.cn, iphone.ac.qq.com, stat.10jqka.com.cn, mp.weixin.qq.com, home.mi.com, portal-portm.meituan.com, mall.meituan.com, rr*.googlevideo.com, youtubei.googleapis.com, oneapp-api.faw-vw.com, m.client.10010.com, m1.ad.10010.com, res.mall.10010.cn, cloud.189.cn, zt-app.go189.cn, portal.zjzwfw.gov.cn, ocrifs.ejoy.sinopec.com, minipro.95504.net, elife.icbc.com.cn, mkt-gateway.tuhu.cn, mcs-mimp-web.sf-express.com, ucmp.sf-express.com, ucmp-static.sf-express.com, common.diditaxi.com.cn, ad.12306.cn, open-cms-api.uc.cn, open-cms-api.quark.cn, homepage-api.smzdm.com, haojia-api.smzdm.com, app-api.smzdm.com, user-api.smzdm.com, article-api.smzdm.com, qianbao.smzdm.com, s-api.smzdm.com, haojia.m.smzdm.com, weixin110.qq.com, security.wechat.com, httpdns.n.netease.com, httpdns.calorietech.com, hc-ssp.sm.cn, xiaohongshu.com
+hostname = gab.122.gov.cn, acs.m.taobao.com, heic.alicdn.com, guide-acs.m.taobao.com, poplayer.template.alibaba.com, cache.bydauto.com.cn, v.icbc.com.cn, ads.iconntech.com, smkmp.96225.com, api.m.jd.com, dns.jd.com, midc.cdn-static.abchina.com.cn, enjoy.cdn-static.abchina.com, api.pinduoduo.com, api.yangkeduo.com, mobile.yangkeduo.com, api-sams.walmartmobile.cn, adm.10jqka.com.cn, iphone.ac.qq.com, stat.10jqka.com.cn, mp.weixin.qq.com, home.mi.com, portal-portm.meituan.com, mall.meituan.com, oneapp-api.faw-vw.com, m.client.10010.com, m1.ad.10010.com, res.mall.10010.cn, cloud.189.cn, zt-app.go189.cn, portal.zjzwfw.gov.cn, ocrifs.ejoy.sinopec.com, minipro.95504.net, elife.icbc.com.cn, mkt-gateway.tuhu.cn, mcs-mimp-web.sf-express.com, ucmp.sf-express.com, homepage-api.smzdm.com, haojia-api.smzdm.com, app-api.smzdm.com, user-api.smzdm.com, article-api.smzdm.com, qianbao.smzdm.com, s-api.smzdm.com, haojia.m.smzdm.com, weixin110.qq.com, security.wechat.com
