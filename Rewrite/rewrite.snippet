@@ -83,6 +83,7 @@
 
 # > 京东
 # hostname = api.m.jd.com, dns.jd.com
+^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(searchBoxWord|stationPullService|uniformRecommend[06]) url reject-dict
 ^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(deliverLayer|getTabHomeInfo|myOrderInfo|orderTrackBusiness|personinfoBusiness|start|welcomeHome) url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/jingdong/jingdong.js
 # 禁京东直播小窗
 ^https?:\/\/api\.m\.jd\.com\/client\.action\?functionId=getWidgetV1052 url reject
@@ -109,13 +110,6 @@
 ^https?:\/\/midc\.cdn-static\.abchina\.com\.cn\/distributecenterimg\/file\/download\/(ed64|74b5) url reject
 ^https?:\/\/enjoy\.cdn-static\.abchina\.com\/yx-engine-web\/file\/download\/(?!7dc2|fe96|cea3|06a8|1b11|d57b|6918|61db|2d58|aa23|) url reject-200
 ^https?:\/\/firefly\.abchina\.com\.cn\/firefly-collection\/Collect url reject-200
-
-# > 拼多多
-# hostname = api.pinduoduo.com, api.yangkeduo.com, mobile.yangkeduo.com
-^https?:\/\/api\.(pinduoduo|yangkeduo)\.com\/api\/cappuccino\/splash url reject
-^https?:\/\/api\.pinduoduo\.com\/api\/aquarius\/hungary\/global\/homepage\? url reject-dict
-# 多多买菜 开屏广告
-^https?:\/\/mobile\.yangkeduo\.com\/proxy\/api\/api\/express\/post\/waybill\/red_packet\/goods_list$ url response-body "list":\[.+\] response-body "list":[]
 
 # > 什么值得买
 # hostname = homepage-api.smzdm.com, haojia-api.smzdm.com, app-api.smzdm.com, user-api.smzdm.com, article-api.smzdm.com, qianbao.smzdm.com, s-api.smzdm.com, haojia.m.smzdm.com
@@ -229,4 +223,4 @@
 ^https:\/\/qadx\.qinlinad\.com\/ad\/v2\/slotSwitch\?slot_id=ADS-220302-1157 url reject-dict
 
 
-hostname = gab.122.gov.cn, ad.12306.cn, acs.m.taobao.com, heic.alicdn.com, guide-acs.m.taobao.com, poplayer.template.alibaba.com, cache.bydauto.com.cn, v.icbc.com.cn, elife.icbc.com.cn, ads.iconntech.com, smkmp.96225.com, api.m.jd.com, dns.jd.com, open-cms-api.uc.cn, open-cms-api.quark.cn, img.meituan.net, s3plus.meituan.net, flowplus.meituan.net, midc.cdn-static.abchina.com.cn, enjoy.cdn-static.abchina.com, api.pinduoduo.com, api.yangkeduo.com, mobile.yangkeduo.com, homepage-api.smzdm.com, haojia-api.smzdm.com, app-api.smzdm.com, user-api.smzdm.com, article-api.smzdm.com, qianbao.smzdm.com, s-api.smzdm.com, haojia.m.smzdm.com, api-sams.walmartmobile.cn, adm.10jqka.com.cn, iphone.ac.qq.com, stat.10jqka.com.cn, mp.weixin.qq.com, weixin110.qq.com, security.wechat.com, home.mi.com, oneapp-api.faw-vw.com, ocrifs.ejoy.sinopec.com, webappcfg.paas.cmbchina.com, mbmodule-openapi.paas.cmbchina.com, m.client.10010.com, m1.ad.10010.com, res.mall.10010.cn, cloud.189.cn, zt-app.go189.cn, portal.zjzwfw.gov.cn, qadx.qinlinad.com
+hostname = gab.122.gov.cn, ad.12306.cn, acs.m.taobao.com, heic.alicdn.com, guide-acs.m.taobao.com, poplayer.template.alibaba.com, cache.bydauto.com.cn, v.icbc.com.cn, elife.icbc.com.cn, ads.iconntech.com, smkmp.96225.com, api.m.jd.com, dns.jd.com, open-cms-api.uc.cn, open-cms-api.quark.cn, img.meituan.net, s3plus.meituan.net, flowplus.meituan.net, midc.cdn-static.abchina.com.cn, enjoy.cdn-static.abchina.com, api.yangkeduo.com, mobile.yangkeduo.com, homepage-api.smzdm.com, haojia-api.smzdm.com, app-api.smzdm.com, user-api.smzdm.com, article-api.smzdm.com, qianbao.smzdm.com, s-api.smzdm.com, haojia.m.smzdm.com, api-sams.walmartmobile.cn, adm.10jqka.com.cn, iphone.ac.qq.com, stat.10jqka.com.cn, mp.weixin.qq.com, weixin110.qq.com, security.wechat.com, home.mi.com, oneapp-api.faw-vw.com, ocrifs.ejoy.sinopec.com, webappcfg.paas.cmbchina.com, mbmodule-openapi.paas.cmbchina.com, m.client.10010.com, m1.ad.10010.com, res.mall.10010.cn, cloud.189.cn, zt-app.go189.cn, portal.zjzwfw.gov.cn, qadx.qinlinad.com
