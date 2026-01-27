@@ -39,10 +39,6 @@
 # hostname = www.deppon.com
 ^https:\/\/www\.deppon\.com\/gwapi\/memberService\/eco\/member\/grade\/commonInterface url reject-dict
 
-# > 曹操出行 微信小程序净化
-# hostname = minicap.caocaokeji.cn
-^https:\/\/minicap\.caocaokeji\.cn\/advert-bss\/pullAdvert url reject-dict
-
 # > EMS 微信小程序净化 由TEXAS和豆豆提供
 ^https:\/\/ump\.ems\.com\.cn\/new-generation-extend\/redis\/pageInfoByChannel url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/ems.js
 
@@ -72,18 +68,12 @@
 ^https:\/\/apiproxy\.zuche\.com\/resource\/carrctapi\/home\/marketing url reject-dict
 ^https:\/\/apiproxy\.zuche\.com\/resource\/carrctapi\/home\/page\/advertising url reject-dict
 
-# > 小电充电 微信小程序
-^https:\/\/smarket\.dian\.so url reject-dict
-^https:\/\/file\.dian\.so\/c\/leto url reject-dict
 
 # > 星巴克 微信小程序净化
 ^https:\/\/3pp\.starbucks\.com\.cn\/wxmem\/popup url reject-dict
 ^https:\/\/3pp\.starbucks\.com\.cn\/wxmem\/index\/banner url reject-dict
 ^https:\/\/3pp\.starbucks\.com\.cn\/wxmem\/index\/global url reject-dict
 
-# > 享道出行 微信小程序净化
-^https:\/\/passengerapi\.saicmobility\.com\/(ad\/requestAd|pay\/v1\/queryOpenedCouponPackages) url reject-dict
-
 
 # 去重后的hostname，将对以下域名进行MITM（MAN-IN-THE-MIDDLE：中间人攻击）
-hostname = common.diditaxi.com.cn, conf.diditaxi.com.cn, www.deppon.com, minicap.caocaokeji.cn, ump.ems.com.cn, webchatapp.fcbox.com, dsp.fcbox.com, qapi.huolala.cn, appuser-static.huolala.cn, orders.kfc.com.cn, dynamicad.kfc.com.cn, res.kfc.com.cn, api.mcd.cn, mxsa.mxbc.net, apiproxy.zuche.com, smarket.dian.so, file.dian.so, 3pp.starbucks.com.cn, passengerapi.saicmobility.com
+hostname = common.diditaxi.com.cn, conf.diditaxi.com.cn, www.deppon.com, ump.ems.com.cn, webchatapp.fcbox.com, dsp.fcbox.com, qapi.huolala.cn, appuser-static.huolala.cn, orders.kfc.com.cn, dynamicad.kfc.com.cn, res.kfc.com.cn, api.mcd.cn, mxsa.mxbc.net, apiproxy.zuche.com, 3pp.starbucks.com.cn
