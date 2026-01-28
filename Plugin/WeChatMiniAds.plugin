@@ -1,0 +1,84 @@
+#!name = 微信小程序去广告
+#!desc = 收录常用小程序的去广告，作者署名在插件内。
+#!openUrl = https://apps.apple.com/app/id414478124
+#!author = 可莉🅥[https://gitlab.com/lodepuly/vpn_tool/-/blob/master/README.md]
+#!raw-url = https://github.com/fmz200/wool_scripts/raw/main/Loon/plugin/WeChatMiniAds.plugin
+#!tag = 去广告
+#!system = 
+#!system_version = 
+#!loon_version = 3.2.1(749)
+#!homepage = https://gitlab.com/lodepuly/vpn_tool/-/blob/master/README.md
+#!icon = https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/wechat.png
+#!date = 2024-09-27 22:18:09
+
+[Rule]
+# 微信小程序通用规则
+DOMAIN, wxsnsdy.wxs.qq.com, REJECT
+DOMAIN, wxsmsdy.video.qq.com, REJECT
+DOMAIN, wxsnsdythumb.wxs.qq.com, REJECT
+
+# 收钱吧广告
+DOMAIN, ads-shopping.shouqianba.com, REJECT
+
+[Rewrite]
+# 招行首页横幅广告 @ArthasYZ
+^https:\/\/mbmodule-openapi\.paas\.cmbchina\.com\/graphic\/v2\/module\/graphic reject
+
+# 丰巢 - 首页服务推广
+^https:\/\/webchatapp\.fcbox\.com\/fcboxactivityweb\/api\/v2\/clientPage\/modulesAggregated\? reject-dict
+# 丰巢 - 首页丰巢直播
+^https:\/\/webchatapp\.fcbox\.com\/fcboxactivityweb\/api\/v2\/clientPage\/getHomeLiveInfo$ reject-dict
+# 丰巢 - 横幅和广告配置
+^https:\/\/dsp\.fcbox\.com\/adSearch\/ reject-dict
+# 丰巢 - 订单页面 - 邀请开通会员横幅
+^https:\/\/webchatapp\.fcbox\.com\/post\/suggestion\/query$ reject-dict
+# 丰巢 - 订单页面 - 好友助力
+^https:\/\/webchatapp\.fcbox\.com\/fcboxactivityweb\/marketingEntrance\/v2\/infoWithItems$ reject-dict
+# 丰巢 - 订单页面 - 悬浮窗
+^https:\/\/webchatapp\.fcbox\.com\/fcboxactivityweb\/marketingEntrance\/info$ reject-dict
+
+# 肯德基 orders.kfc.com.cn, dynamicad.kfc.com.cn, res.kfc.com.cn
+# ^https:\/\/orders\.kfc\.com\.cn\/preorder-portal\/api\/v2\/coupon reject-dict
+# ^https:\/\/dynamicad\.kfc\.com\.cn\/api reject-dict
+# ^https:\/\/res\.kfc\.com\.cn\/CRM\/kfcad\/custom_v2\/wxapp reject-dict
+# ^https:\/\/orders\.kfc\.com\.cn\/preorder-portal\/api\/v2\/activity reject-dict
+
+# 麦当劳 api.mcd.cn
+^https:\/\/api\.mcd\.cn\/bff\/portal\/home\/hotActivity reject-dict
+
+# 星巴克 3pp.starbucks.com.cn
+^https:\/\/3pp\.starbucks\.com\.cn\/wxmem\/popup reject-dict
+^https:\/\/3pp\.starbucks\.com\.cn\/wxmem\/index\/banner reject-dict
+^https:\/\/3pp\.starbucks\.com\.cn\/wxmem\/index\/global reject-dict
+
+# EMS @ArthasYZ
+^https:\/\/ump\.ems\.com\.cn\/mailAd$ reject
+
+# 货拉拉 qapi.huolala.cn, appuser-static.huolala.cn
+^https:\/\/qapi\.huolala\.cn\/ads reject-dict
+^https:\/\/qapi\.huolala\.cn\/home_new_user reject-dict
+^https:\/\/qapi\.huolala\.cn\/get_service_list reject-dict
+^https:\/\/appuser-static\.huolala\.cn\/imgs reject-dict
+
+# 蜜雪冰城 mxsa.mxbc.net
+^https:\/\/mxsa\.mxbc\.net\/api\/v1\/adinfo\/adplace\/query reject-dict
+
+# 德邦快递 www.deppon.com
+^https:\/\/www\.deppon\.com\/gwapi\/memberService\/eco\/member\/grade\/commonInterface reject-dict
+
+# 途虎养车小程序 @张军
+^https:\/\/mkt-gateway\.tuhu\.cn\/mkt-scene-marketing-service\/api\/scene\/queryScheme reject-dict
+
+# 收钱吧小程序 @可莉🅥
+^https:\/\/api\.pinduoduo\.com\/api\/ktt_gateway\/activity\/feeds\/personal_home_page\/ reject
+
+# 顺丰速运+ @可莉🅥
+^https:\/\/ucmp\.sf-express\.com\/proxy\/operation-platform\/info-flow-adver\/query reject-dict
+^https:\/\/ucmp\.sf-express\.com\/proxy\/esgcempcore\/memberGoods\/pointMallService\/goodsList reject-dict
+
+[Script]
+# EMS中国邮政物流速递 @TEAXS ump.ems.com.cn
+http-response ^https:\/\/ump\.ems\.com\.cn\/new-generation-extend\/redis\/pageInfoByChannel script-path = https://raw.githubusercontent.com/Repcz/Tool/X/Loon/Script/lodepuly/WexinMiniPrograms/ems/ems.js, requires-body = true, tag = EMS中国邮政物流速递去广告
+
+[MitM]
+hostname = wxsnsdy.wxs.qq.com, wxsmsdy.video.qq.com, wxsnsdythumb.wxs.qq.com, ads-shopping.shouqianba.com, mbmodule-openapi.paas.cmbchina.com, webchatapp.fcbox.com, dsp.fcbox.com, orders.kfc.com.cn, dynamicad.kfc.com.cn, res.kfc.com.cn, api.mcd.cn, 3pp.starbucks.com.cn, ump.ems.com.cn, qapi.huolala.cn, appuser-static.huolala.cn, mxsa.mxbc.net, www.deppon.com, mkt-gateway.tuhu.cn, api.pinduoduo.com, ucmp.sf-express.com
